@@ -1,76 +1,24 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Sistema Flask{% endblock %}</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 40px;
-            background-color: #f5f5f5;
-        }
-        header {
-            margin-bottom: 30px;
-        }
-        nav a {
-            margin-right: 15px;
-            text-decoration: none;
-            color: #007bff;
-        }
-        nav a:hover {
-            text-decoration: underline;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        .btn {
-            padding: 8px 16px;
-            background-color: #007bff;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #0056b3;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <nav>
-            <a href="{{ url_for('add_item') }}">Adicionar Item</a>
-            <a href="{{ url_for('list_items') }}">Listar Itens</a>
-            <a href="{{ url_for('logout') }}">Sair</a>
-        </nav>
-    </header>
+{% extends "base.html" %}
+{% block title %}Lista de Itens{% endblock %}
+{% block content %}
+<h2>Itens Cadastrados</h2>
 
-    <div class="container">
-        {% block content %}{% endblock %}
-    </div>
-    <h2>Itens Cadastrados</h2>
-    {% if items %}
-    <table border="1" cellpadding="10" cellspacing="0">
-        <tr>
-            <th>Nome</th>
-            <th>Descrição</th>
-            <th>Preço (R$)</th>
-        </tr>
-        {% for item in items %}
-        <tr>
-            <td>{{ item.name }}</td>
-            <td>{{ item.description }}</td>
-            <td>{{ "%.2f"|format(item.price) }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-    {% else %}
-    <p>Nenhum item cadastrado ainda.</p>
-    {% endif %}
-    {% endblock %}
-</body>
-</html>
+{% if items %}
+<table border="1" cellpadding="10" cellspacing="0">
+    <tr>
+        <th>Nome</th>
+        <th>Descrição</th>
+        <th>Preço (R$)</th>
+    </tr>
+    {% for item in items %}
+    <tr>
+        <td>{{ item.name }}</td>
+        <td>{{ item.description }}</td>
+        <td>{{ "%.2f"|format(item.price) }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Nenhum item cadastrado ainda.</p>
+{% endif %}
+{% endblock %}
