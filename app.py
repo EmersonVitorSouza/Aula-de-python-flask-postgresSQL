@@ -21,7 +21,7 @@ def criar_tabelas():
     cur.execute("""
     CREATE TABLE IF NOT EXISTS usuarios (
         id SERIAL PRIMARY KEY,
-        username VARCHAR(50) UNIQUE NOT NULL,
+        username VARCHAR(100) UNIQUE NOT NULL,
         senha VARCHAR(255) NOT NULL
     );
 
