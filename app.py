@@ -103,7 +103,7 @@ def add_item():
     if request.method == "POST":
         name = request.form["name"]
         desc = request.form["description"]
-        price = request.form["price"]
+        price = request.form["price"].replace(",", ".")
         with get_conn() as conn, conn.cursor() as cur:
             cur.execute(
                 "INSERT INTO itens (user_id, name, description, price) VALUES (%s,%s,%s,%s)",
