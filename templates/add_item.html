@@ -15,3 +15,12 @@
     <button class="btn" type="submit">Salvar</button>
 </form>
 {% endblock %}
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, msg in messages %}
+        <div class="alert alert-{{ category }}">{{ msg }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
