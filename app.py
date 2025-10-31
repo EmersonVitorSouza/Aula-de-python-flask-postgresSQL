@@ -54,7 +54,7 @@ def register():
         with get_conn() as conn:
             with conn.cursor() as cur:
                 try:
-                    cur.execute("INSERT INTO usuarios (username,password_hash) VALUES (%s,%s) RETURNING id", (username,pw_hash))
+                    cur.execute("INSERT INTO usuarios (username,senha) VALUES (%s,%s) RETURNING id", (username,pw_hash))
                     conn.commit()
                     flash("Cadastro realizado. Faça login.")
                     return redirect(url_for("login"))
@@ -70,9 +70,9 @@ def login():
         password = request.form["password"]
         with get_conn() as conn:
             with conn.cursor(cursor_factory=RealDictCursor) as cur:
-                cur.execute("SELECT id, password_hash FROM usuarios WHERE username=%s", (username,))
+                cur.execute("SELECT id, senha FROM usuarios WHERE username=%s", (username,))
                 user = cur.fetchone()
-                if user and check_password_hash(user["password_hash"], password):
+                if user and check_password_hash(user["senha"], password):
                     session["user_id"] = user["id"]
                     session["username"] = username
                     return redirect(url_for("list_items"))
