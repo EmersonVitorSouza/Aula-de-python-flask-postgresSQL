@@ -8,6 +8,16 @@
     <label>Senha:</label><br>
     <input type="password" name="password" required><br><br>
     <button class="btn" type="submit">Entrar</button>
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, msg in messages %}
+        <div class="alert alert-{{ category }}" style="padding:10px; margin:10px; border-radius:5px; border:1px solid #ccc;">
+            {{ msg }}
+        </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
 </form>
 
 <p>Não tem conta? <a href="{{ url_for('register') }}">Cadastre-se</a></p>

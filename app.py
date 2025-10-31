@@ -44,42 +44,56 @@ def index():
         return redirect(url_for("list_items"))
     return redirect(url_for("login"))
 
-@app.route("/register", methods=["GET","POST"])
+@app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        username = request.form["username"].strip()
-        password = request.form["password"].strip()
+        username = request.form.get("username").strip()
+        password = request.form.get("password").strip()
+
+        if not username or not password:
+            flash("Preencha todos os campos.", "warning")
+            return render_template("register.html")
+
         pw_hash = generate_password_hash(password)
 
         try:
             with get_conn() as conn, conn.cursor() as cur:
                 cur.execute("INSERT INTO usuarios (username, senha) VALUES (%s, %s)", (username, pw_hash))
                 conn.commit()
-                flash("✅ Cadastro realizado! Faça login.", "success")
-                return redirect(url_for("login"))
-        except psycopg2.Error as e:
-            flash("⚠️ Usuário já existe ou dados inválidos.", "danger")
+            flash("✅ Cadastro realizado com sucesso! Faça login.", "success")
+            return redirect(url_for("login"))
+        except psycopg2.errors.UniqueViolation:
+            flash("⚠️ Usuário já existe.", "danger")
+        except Exception as e:
+            flash(f"Erro ao cadastrar: {e}", "danger")
 
     return render_template("register.html")
 
-@app.route("/login", methods=["GET","POST"])
+
+@app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form["username"].strip()
-        password = request.form["password"].strip()
+        username = request.form.get("username").strip()
+        password = request.form.get("password").strip()
+
+        if not username or not password:
+            flash("Preencha todos os campos.", "warning")
+            return render_template("login.html")
 
         with get_conn() as conn, conn.cursor(cursor_factory=RealDictCursor) as cur:
             cur.execute("SELECT id, senha FROM usuarios WHERE username = %s", (username,))
             user = cur.fetchone()
 
         if user and check_password_hash(user["senha"], password):
-            session.update({"user_id": user["id"], "username": username})
-            flash("✅ Login realizado com sucesso!", "success")
+            session["user_id"] = user["id"]
+            session["username"] = username
+            flash(f"Bem-vindo, {username}!", "success")
             return redirect(url_for("list_items"))
-        else:
-            flash("❌ Usuário ou senha inválidos.", "danger")
+
+        flash("Usuário ou senha inválidos.", "danger")
 
     return render_template("login.html")
+
 
 @app.route("/logout")
 def logout():
