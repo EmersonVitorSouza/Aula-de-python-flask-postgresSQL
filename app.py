@@ -65,18 +65,20 @@ def register():
 
 @app.route("/login", methods=["GET","POST"])
 def login():
-    if request.method=="POST":
+    if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        with get_conn() as conn:
-            with conn.cursor(cursor_factory=RealDictCursor) as cur:
-                cur.execute("SELECT id, senha FROM usuarios WHERE username=%s", (username,))
-                user = cur.fetchone()
-                if user and check_password_hash(user["senha"], password):
-                    session["user_id"] = user["id"]
-                    session["username"] = username
-                    return redirect(url_for("list_items"))
-                flash("Usuário ou senha inválidos.")
+
+        with get_conn() as conn, conn.cursor(cursor_factory=RealDictCursor) as cur:
+            cur.execute("SELECT id, senha FROM usuarios WHERE username = %s", (username,))
+            user = cur.fetchone()
+
+        if user and check_password_hash(user["senha"], password):
+            session.update({"user_id": user["id"], "username": username})
+            return redirect(url_for("list_items"))
+
+        flash("Usuário ou senha inválidos.")
+
     return render_template("login.html")
 
 @app.route("/logout")
