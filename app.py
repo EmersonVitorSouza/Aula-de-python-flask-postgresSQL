@@ -106,7 +106,7 @@ def add_item():
         price = request.form["price"].replace(",", ".")
         with get_conn() as conn, conn.cursor() as cur:
             cur.execute(
-                "INSERT INTO itens (name, description, price) VALUES (%s,%s,%s,%s)",
+                "INSERT INTO itens (name, description, price) VALUES (%s,%s,%s)",
                 (name, desc, price),
             )
             conn.commit()
