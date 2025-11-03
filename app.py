@@ -106,8 +106,8 @@ def add_item():
         price = request.form["price"].replace(",", ".")
         with get_conn() as conn, conn.cursor() as cur:
             cur.execute(
-                "INSERT INTO itens (user_id, name, description, price) VALUES (%s,%s,%s,%s)",
-                (session["user_id"], name, desc, price),
+                "INSERT INTO itens (name, description, price) VALUES (%s,%s,%s,%s)",
+                (name, desc, price),
             )
             conn.commit()
             flash("✅ Item adicionado com sucesso!", "success")
