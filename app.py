@@ -81,7 +81,7 @@ def add_item():
         description = request.form["description"]
         price = request.form["price"].replace(",", ".")
         with get_conn() as conn, conn.cursor() as cur:
-            cur.execute("INSERT INTO itens (nome, description, price) VALUES (%s,%s,%s)",(nome, description, price))
+            cur.execute("INSERT INTO itens (nome, description, price) VALUES (%s,%s,%s)",(nome, description, price),)
             conn.commit()
             flash("✅ Item adicionado com sucesso!", "success")
             return redirect(url_for("list_items"))
