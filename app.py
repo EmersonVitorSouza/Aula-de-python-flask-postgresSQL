@@ -96,7 +96,7 @@ def logout():
     flash("Você saiu da conta.", "info")
     return redirect(url_for("login"))
 
-@app.route("/items/new", methods=["GET","POST"])
+@app.route("/items", methods=["GET","POST"])
 def add_item():
     if "user_id" not in session:
         return redirect(url_for("login"))
@@ -111,7 +111,7 @@ def add_item():
             return redirect(url_for("list_items"))
     return render_template("add_item.html")
 
-@app.route("/items")
+@app.route("/list_items", methods=["GET"])
 def list_items():
     if "user_id" not in session:
         return redirect(url_for("login"))
