@@ -13,30 +13,6 @@ app.secret_key = os.environ.get("SECRET_KEY", "segredo-local")
 def get_conn():
     return psycopg2.connect(os.getenv("DATABASE_URL"), sslmode="require")
 
-# Criar tabelas
-def criar_tabelas():
-    conn = get_conn()
-    cur = conn.cursor()
-    cur.execute("""
-    CREATE TABLE IF NOT EXISTS usuarios (
-        id SERIAL PRIMARY KEY,
-        username VARCHAR(100) UNIQUE NOT NULL,
-        senha VARCHAR(100) NOT NULL
-    );
-
-    CREATE TABLE IF NOT EXISTS itens (
-        id SERIAL PRIMARY KEY,
-        user_id INTEGER REFERENCES usuarios(id) ON DELETE CASCADE,
-        name VARCHAR(100),
-        description TEXT,
-        price DECIMAL(10,2),
-        created_at TIMESTAMP DEFAULT NOW()
-    );
-    """)
-    conn.commit()
-    cur.close()
-    conn.close()
-
 @app.route("/")
 def index():
     if "user_id" in session:
@@ -101,7 +77,7 @@ def add_item():
     if "user_id" not in session:
         return redirect(url_for("login"))
     if request.method == "POST":
-        nome = request.form["name"]
+        nome = request.form["nome"]
         description = request.form["description"]
         price = request.form["price"].replace(",", ".")
         with get_conn() as conn, conn.cursor() as cur:
@@ -121,5 +97,4 @@ def list_items():
     return render_template("list_items.html", items=rows)
 
 if __name__ == "__main__":
-    criar_tabelas()
     app.run(debug=True)
