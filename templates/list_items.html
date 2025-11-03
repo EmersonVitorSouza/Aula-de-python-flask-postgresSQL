@@ -12,9 +12,9 @@
     </tr>
     {% for item in items %}
     <tr>
-        <td>{{ item.name }}</td>
-        <td>{{ item.description }}</td>
-        <td>{{ "%.2f"|format(item.price) }}</td>
+        <td>{{ item.nome }}</td>
+        <td>{{ item.descricao }}</td>
+        <td>{{ "%.2f"|format(item.preco) }}</td>
     </tr>
     {% endfor %}
 </table>
