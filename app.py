@@ -78,10 +78,10 @@ def add_item():
         return redirect(url_for("login"))
     if request.method == "POST":
         nome = request.form["nome"]
-        description = request.form["description"]
-        price = request.form["price"].replace(",", ".")
+        descricao = request.form["descricao"]
+        preco = request.form["preco"].replace(",", ".")
         with get_conn() as conn, conn.cursor() as cur:
-            cur.execute("INSERT INTO itens (nome, description, price) VALUES (%s,%s,%s)",(nome, description, price),)
+            cur.execute("INSERT INTO itens (nome, descricao, preco) VALUES (%s,%s,%s)",(nome, descricao, preco),)
             conn.commit()
             flash("✅ Item adicionado com sucesso!", "success")
             return redirect(url_for("list_items"))
