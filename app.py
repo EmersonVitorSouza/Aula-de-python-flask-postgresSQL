@@ -101,13 +101,13 @@ def add_item():
     if "user_id" not in session:
         return redirect(url_for("login"))
     if request.method == "POST":
-        name = request.form["name"]
+        nome = request.form["name"]
         desc = request.form["description"]
         price = request.form["price"].replace(",", ".")
         with get_conn() as conn, conn.cursor() as cur:
             cur.execute(
-                "INSERT INTO itens (name, description, price) VALUES (%s,%s,%s)",
-                (name, desc, price),
+                "INSERT INTO itens (nome, description, price) VALUES (%s,%s,%s)",
+                (nome, desc, price),
             )
             conn.commit()
             flash("✅ Item adicionado com sucesso!", "success")
