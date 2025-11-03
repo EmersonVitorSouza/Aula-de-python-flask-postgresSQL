@@ -92,7 +92,7 @@ def list_items():
     if "user_id" not in session:  # exige autenticação
         return redirect(url_for("login"))  # redireciona se não autenticado
     with get_conn() as conn, conn.cursor(cursor_factory=RealDictCursor) as cur:  # abre conexão e cursor em formato dicionário
-        cur.execute("SELECT * FROM itens ORDER BY id DESC")  # busca todos os itens ordenando pelo id (mais recentes primeiro)
+        cur.execute("SELECT * FROM itens ORDER BY id_itens DESC")  # busca todos os itens ordenando pelo id (mais recentes primeiro)
         rows = cur.fetchall()  # obtém todas as linhas retornadas pela query
     return render_template("list_items.html", items=rows)  # renderiza o template passando os itens como variável
 
