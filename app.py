@@ -53,11 +53,11 @@ def login():
             return render_template("login.html")  # reexibe formulário
 
         with get_conn() as conn, conn.cursor(cursor_factory=RealDictCursor) as cur:  # abre conexão com cursor que retorna dicts
-            cur.execute("SELECT id, senha FROM usuarios WHERE username = %s", (username,))  # busca usuário pelo username
+            cur.execute("SELECT id_user, senha FROM usuarios WHERE username = %s", (username,))  # busca usuário pelo username
             user = cur.fetchone()  # pega a primeira linha (ou None)
 
         if user and user["senha"] == password:  # verifica se usuário existe e senha bate (comparação direta, sem hash)
-            session["user_id"] = user["id"]  # guarda id do usuário na sessão
+            session["user_id"] = user["id_user"]  # guarda id do usuário na sessão
             session["username"] = username  # guarda username na sessão (útil pra exibir)
             flash(f"Bem-vindo, {username}!", "success")  # mensagem de boas-vindas
             return redirect(url_for("list_items"))  # redireciona para página de itens
